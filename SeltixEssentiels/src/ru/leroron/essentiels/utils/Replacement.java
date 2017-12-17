@@ -2,7 +2,7 @@ package ru.leroron.essentiels.utils;
 
 @SuppressWarnings("All")
 public interface Replacement {
-    public void re
+
 }
 /*
 © While Inside 2017
