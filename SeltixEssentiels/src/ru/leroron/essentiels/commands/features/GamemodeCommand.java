@@ -8,33 +8,34 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.leroron.essentiels.Main;
 import ru.leroron.essentiels.configs.MainConfig;
+import ru.leroron.essentiels.configs.MessageConfig;
 
-public class GMCommand implements CommandExecutor {
+public class GamemodeCommand implements CommandExecutor {
     public void setGamemode(Player p1, Player p, String s) {
         GameMode mode;
         try {
             int i = Integer.parseInt(s);
             p.setGameMode(mode = GameMode.getByValue(i));
         } catch (NumberFormatException e) {
-            p.setGameMode(mode = GameMode.valueOf(s));
+            p.setGameMode(mode = GameMode.valueOf(s.toUpperCase()));
         }
-        p1.sendMessage(MainConfig.getMessage("messages.gamemode.msg")
-                .replace("%player", p.getName())
+        p1.sendMessage(MessageConfig.getMessage("gamemode.msg")
+                .replace("%player", Main.getPrefix(p) + p.getName())
                 .replace("%mode", mode.toString()));
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
         if (!sender.hasPermission("essentiels.gamemode")) {
-            sender.sendMessage(MainConfig.getMessage("messages.gamemode.noperms"));
+            sender.sendMessage(MessageConfig.getMessage("gamemode.noperms"));
             return true;
         }
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MainConfig.getMessage("messages.gamemode.notplayer"));
+            sender.sendMessage(MessageConfig.getMessage("gamemode.notplayer"));
             return true;
         }
         if (args.length == 0) {
-            sender.sendMessage(MainConfig.getMessage("messages.gamemode.usage"));
+            sender.sendMessage(MessageConfig.getMessage("gamemode.usage"));
             return true;
         }
         if(args.length == 1) {
@@ -42,7 +43,7 @@ public class GMCommand implements CommandExecutor {
         } else {
             Player p = Bukkit.getPlayer(args[1]);
             if(p == null) {
-                sender.sendMessage(MainConfig.getMessage("messages.gamemode.notonline"));
+                sender.sendMessage(MessageConfig.getMessage("gamemode.notonline"));
                 return true;
             }
             setGamemode((Player) sender, p, args[0]);

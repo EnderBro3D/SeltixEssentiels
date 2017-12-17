@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.leroron.essentiels.Main;
 import ru.leroron.essentiels.configs.MainConfig;
+import ru.leroron.essentiels.configs.MessageConfig;
 
 public class ReportCommand implements CommandExecutor {
 
@@ -14,14 +15,14 @@ public class ReportCommand implements CommandExecutor {
         if (reason == null) reason = "§eНет причины";
         Main.reports.put(p, reason);
 
-        String msg = MainConfig.getMessage("messages.report.adminmode.message")
+        String msg = MessageConfig.getMessage("report.adminmode.message")
                 .replace("%player", Main.getPrefix(p) + p.getName())
                 .replace("%sender", Main.getPrefix(reporter) + reporter.getName())
                 .replace("%reason", reason);
         Bukkit.getOnlinePlayers().stream()
                 .filter(player -> player.hasPermission("essentiels.staffreport"))
                 .forEach(player -> player.sendMessage(msg));
-        reporter.sendMessage(MainConfig.getMessage("messages.report.send")
+        reporter.sendMessage(MessageConfig.getMessage("report.send")
                 .replace("%player", Main.getPrefix(p) + p.getName())
                 .replace("%reason", "§eНет причины"));
     }
@@ -30,21 +31,22 @@ public class ReportCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("essentiels.report")) {
-            sender.sendMessage(MainConfig.getMessage("messages.report.noperms"));
+            sender.sendMessage(MessageConfig.getMessage("report.noperms"));
             return true;
         }
         if (args.length == 0) {
-            sender.sendMessage(MainConfig.getMessage("messages.report.usage"));
+            sender.sendMessage(MessageConfig.getMessage("report.usage"));
             return true;
         }
         String name = args[0];
         Player p1 = Bukkit.getPlayer(name);
         if (p1 == null) {
-            sender.sendMessage(MainConfig.getMessage("messages.report.notonline"));
+            sender.sendMessage(MessageConfig.getMessage("report.notonline"));
             return true;
         }
         if (Main.reports.containsKey(p1)) {
-            sender.sendMessage(MainConfig.getMessage("messages.report.alreadyreport"));
+            sender.sendMessage(MessageConfig.getMessage("report.alreadyreport")
+                    .replace("%player", Main.getPrefix(p1) + p1.getName()));
             return true;
         }
 

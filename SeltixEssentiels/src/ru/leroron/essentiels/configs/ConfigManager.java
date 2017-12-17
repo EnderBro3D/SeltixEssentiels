@@ -33,6 +33,10 @@ public class ConfigManager {
         }
     }
 
+    public static void reloadConfigurations() {
+        configurationMap.keySet().forEach(ConfigManager::reloadConfiguration);
+    }
+
     private static void disable(JavaPlugin plugin, String message) {
         System.err.println(message);
         Main.getPlugin().getPluginLoader().disablePlugin(plugin);

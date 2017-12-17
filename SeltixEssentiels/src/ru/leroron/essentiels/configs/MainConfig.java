@@ -1,9 +1,9 @@
 package ru.leroron.essentiels.configs;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import ru.leroron.essentiels.Main;
+import ru.leroron.essentiels.utils.LocationUtil;
 
 public class MainConfig {
 
@@ -24,7 +24,7 @@ public class MainConfig {
     }
 
     public static void setSpawn(Location loc) {
-        getConfig().set("locations.spawn", loc);
+        getConfig().set("locations.spawn", LocationUtil.toStringWXYZYP(loc));
         saveConfig();
     }
 
@@ -33,10 +33,6 @@ public class MainConfig {
     }
 
     public static Location getSpawn() {
-        return (Location) getConfig().get("locations.spawn");
-    }
-
-    public static String getMessage(String path) {
-        return ChatColor.translateAlternateColorCodes('&', getConfig().getString(path));
+        return LocationUtil.fromStringWXYZYP(getConfig().getString("locations.spawn"));
     }
 }

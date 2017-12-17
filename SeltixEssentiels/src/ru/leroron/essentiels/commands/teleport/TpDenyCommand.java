@@ -6,12 +6,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.leroron.essentiels.Main;
 import ru.leroron.essentiels.configs.MainConfig;
+import ru.leroron.essentiels.configs.MessageConfig;
 
 public class TpDenyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("essentiels.call")) {
-            sender.sendMessage(MainConfig.getMessage("messages.call.noperms"));
+            sender.sendMessage(MessageConfig.getMessage("call.noperms"));
             return true;
         }
         Main.deny((Player) sender);

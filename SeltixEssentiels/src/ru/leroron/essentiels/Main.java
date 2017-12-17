@@ -3,9 +3,9 @@ package ru.leroron.essentiels;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.milkbowl.vault.chat.Chat;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.leroron.essentiels.commands.MainCommand;
@@ -23,10 +23,7 @@ import ru.leroron.essentiels.commands.teleport.spawn.SetspawnCommand;
 import ru.leroron.essentiels.commands.teleport.spawn.SpawnCommand;
 import ru.leroron.essentiels.commands.teleport.warp.SetwarpCommand;
 import ru.leroron.essentiels.commands.teleport.warp.WarpCommand;
-import ru.leroron.essentiels.configs.ConfigManager;
-import ru.leroron.essentiels.configs.HomeConfig;
-import ru.leroron.essentiels.configs.MainConfig;
-import ru.leroron.essentiels.configs.WarpConfig;
+import ru.leroron.essentiels.configs.*;
 import ru.leroron.essentiels.listeners.ChatListener;
 import ru.leroron.essentiels.listeners.MainListener;
 import ru.leroron.essentiels.storage.BanStorage;
@@ -67,13 +64,13 @@ public class Main extends JavaPlugin {
             Player p1 = requests.get(p);
             p1.teleport(p);
             requests.remove(p);
-            p.sendMessage(MainConfig.getMessage("messages.call.accept.accept").replace("%player", getPrefix(p1) + p1.getName()));
+            p.sendMessage(MessageConfig.getMessage("call.accept.accept").replace("%player", getPrefix(p1) + p1.getName()));
         }
     }
 
     public static boolean check(Player p) {
         if (!requests.containsKey(p)) {
-            String s = MainConfig.getMessage("messages.call.notrequests");
+            String s = MessageConfig.getMessage("call.notrequests");
             p.sendMessage(s);
             return false;
         }
@@ -83,7 +80,7 @@ public class Main extends JavaPlugin {
     public static void deny(Player p) {
         if (check(p)) {
             Player p1 = requests.get(p);
-            p.sendMessage(MainConfig.getMessage("messages.call.deny.deny").replace("%player", getPrefix(p1) + p1.getName()));
+            p.sendMessage(MessageConfig.getMessage("call.deny.deny").replace("%player", getPrefix(p1) + p1.getName()));
             requests.remove(p);
         }
     }
@@ -100,38 +97,40 @@ public class Main extends JavaPlugin {
         HomeConfig.loadConfig(this);
         WarpConfig.loadConfig(this);
         BanStorage.loadBans(this);
+        MessageConfig.loadConfig(this);
 
-        Bukkit.getServer().getPluginManager().registerEvents(new ChatListener(), this);
-        Bukkit.getServer().getPluginManager().registerEvents(new MainListener(), this);
+        PluginManager pluginManager = getServer().getPluginManager();
+        pluginManager.registerEvents(new ChatListener(), this);
+        pluginManager.registerEvents(new MainListener(), this);
 
-        CommandRegister.reg(this, new GMCommand(), new String[]{"gamemode", "gm"}, "Change GameMode", "/gm");
-        CommandRegister.reg(this, new MainCommand(), new String[]{"essentiels", "ess", "seltixess", "seltixessentiels", "se"}, "Main command in plugin", "/essentiels");
-        CommandRegister.reg(this, new BanCommand(), new String[]{"ban", "permban"}, "Give ban", "/ban");
-        CommandRegister.reg(this, new FlyCommand(), new String[]{"fly", "flight"}, "Flight", "/fly");
-        CommandRegister.reg(this, new ClearCommand(), new String[]{"clear", "invclear", "inventoryclear"}, "Clear inventory the player", "/clear");
-        CommandRegister.reg(this, new KickCommand(), new String[]{"kick"}, "Kick player", "/kick");
-        CommandRegister.reg(this, new HealCommand(), new String[]{"heal"}, "Heal player", "/heal");
-        CommandRegister.reg(this, new GodCommand(), new String[]{"god"}, "God mode", "/god");
-        CommandRegister.reg(this, new SethomeCommand(), new String[]{"sethome"}, "Set home", "/sethome");
-        CommandRegister.reg(this, new HomeCommand(), new String[]{"home"}, "Teleport to home", "/home");
-        CommandRegister.reg(this, new SetwarpCommand(), new String[]{"setwarp"}, "Set warp", "/setwarp");
-        CommandRegister.reg(this, new WarpCommand(), new String[]{"warp"}, "Teleport to warp", "/warp");
-        CommandRegister.reg(this, new UnbanCommand(), new String[]{"unban", "pardon"}, "Unban to banned player", "/unban");
-        CommandRegister.reg(this, new SpawnCommand(), new String[]{"spawn"}, "Teleport to spawn", "/spawn");
-        CommandRegister.reg(this, new SetspawnCommand(), new String[]{"setspawn"}, "Set spawnLocation", "/setspawn");
-        CommandRegister.reg(this, new CallCommand(), new String[]{"call", "tpa"}, "Teleport to player", "/call");
-        CommandRegister.reg(this, new ReportCommand(), new String[]{"report"}, "Report to player", "/report");
-        CommandRegister.reg(this, new FeedCommand(), new String[]{"feed"}, "Feeding", "/feed");
-        CommandRegister.reg(this, new AskCommand(), new String[]{"ask"}, "Question to admin", "/ask");
-        CommandRegister.reg(this, new AskReplyCommand(), new String[]{"askreply"}, "Reply to question to admin", "/askreply");
-        CommandRegister.reg(this, new MsgCommand(), new String[]{"msg", "m", "message"}, "Send message to player", "/m");
-        CommandRegister.reg(this, new MemoryCommand(), new String[]{"gc", "memory", "память"}, "View memory", "/gc");
-        CommandRegister.reg(this, new CallCommand(), new String[]{"call", "tpa"}, "Request to teleport to player", "/call");
-        CommandRegister.reg(this, new TpAcceptCommand(), new String[]{"tpaccept", "tpyes"}, "Accept teleport", "/tpyes");
-        CommandRegister.reg(this, new TpDenyCommand(), new String[]{"tpdeny", "tpno"}, "Feeding", "/feed");
-        CommandRegister.reg(this, new BroadcastCommand(), new String[]{"bc", "broadcast"}, "Broadcast", "/bc");
-        CommandRegister.reg(this, new VanishCommand(), new String[]{"vanish", "v"}, "Kick player", "/vanish");
-        CommandRegister.reg(this, new ChatClearCommand(), new String[]{"chatclear", "cclear"}, "Clear chat", "/chatclear");
+        CommandRegister.reg(this, new GamemodeCommand(), new String[]{"gamemode", "gm"});
+        CommandRegister.reg(this, new MainCommand(), new String[]{"essentiels", "ess", "seltixess", "seltixessentiels", "se"});
+        CommandRegister.reg(this, new BanCommand(), new String[]{"ban", "permban"});
+        CommandRegister.reg(this, new FlyCommand(), new String[]{"fly", "flight"});
+        CommandRegister.reg(this, new ClearCommand(), new String[]{"clear", "invclear", "inventoryclear"});
+        CommandRegister.reg(this, new KickCommand(), new String[]{"kick"});
+        CommandRegister.reg(this, new HealCommand(), new String[]{"heal"});
+        CommandRegister.reg(this, new GodCommand(), new String[]{"god"});
+        CommandRegister.reg(this, new SethomeCommand(), new String[]{"sethome"});
+        CommandRegister.reg(this, new HomeCommand(), new String[]{"home"});
+        CommandRegister.reg(this, new SetwarpCommand(), new String[]{"setwarp"});
+        CommandRegister.reg(this, new WarpCommand(), new String[]{"warp"});
+        CommandRegister.reg(this, new UnbanCommand(), new String[]{"unban", "pardon"});
+        CommandRegister.reg(this, new SpawnCommand(), new String[]{"spawn"});
+        CommandRegister.reg(this, new SetspawnCommand(), new String[]{"setspawn"});
+        CommandRegister.reg(this, new CallCommand(), new String[]{"call", "tpa"});
+        CommandRegister.reg(this, new ReportCommand(), new String[]{"report"});
+        CommandRegister.reg(this, new FeedCommand(), new String[]{"feed"});
+        CommandRegister.reg(this, new AskCommand(), new String[]{"ask"});
+        CommandRegister.reg(this, new AskReplyCommand(), new String[]{"askreply"});
+        CommandRegister.reg(this, new MsgCommand(), new String[]{"msg", "m", "message"});
+        CommandRegister.reg(this, new MemoryCommand(), new String[]{"gc", "memory", "память"});
+        CommandRegister.reg(this, new CallCommand(), new String[]{"call", "tpa"});
+        CommandRegister.reg(this, new TpAcceptCommand(), new String[]{"tpaccept", "tpyes"});
+        CommandRegister.reg(this, new TpDenyCommand(), new String[]{"tpdeny", "tpno"});
+        CommandRegister.reg(this, new BroadcastCommand(), new String[]{"bc", "broadcast"});
+        CommandRegister.reg(this, new VanishCommand(), new String[]{"vanish", "v"});
+        CommandRegister.reg(this, new ChatClearCommand(), new String[]{"chatclear", "cclear"});
     }
 
     public static void a(String s, Object... o) {
@@ -141,8 +140,7 @@ public class Main extends JavaPlugin {
     public static Main getPlugin() {
         return plugin;
     }
-
-
+    
     public static String getPrefix(Player p) {
         return ChatColor.translateAlternateColorCodes('&', chat.getGroupPrefix(p.getWorld(), chat.getPrimaryGroup(p)));
     }

@@ -38,13 +38,13 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
         return this.registeredWith;
     }
 
-    public static void reg(Plugin plugin, CommandExecutor cxecutor, String[] aliases, String desc, String usage) {
+    public static void reg(Plugin plugin, CommandExecutor cxecutor, String name, String[] aliases) {
         try {
-            CommandRegister reg = new CommandRegister(aliases, desc, usage, cxecutor, new Object(), plugin);
+            CommandRegister reg = new CommandRegister(aliases, "", "", cxecutor, new Object(), plugin);
             Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             field.setAccessible(true);
             CommandMap map = (CommandMap) field.get(Bukkit.getServer());
-            map.register(plugin.getDescription().getName(), reg);
+            map.register(name, reg);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import ru.leroron.essentiels.Main;
+import ru.leroron.essentiels.utils.LocationUtil;
 
 public class WarpConfig {
     public static void loadConfig(Main plugin) {
@@ -23,12 +24,12 @@ public class WarpConfig {
     }
 
     public static void setWarp(String warp, Location loc) {
-        getConfig().set("warps." + warp.toLowerCase(), loc);
+        getConfig().set("warps." + warp.toLowerCase(), LocationUtil.toStringWXYZYP(loc));
         saveConfig();
     }
 
     public static Location getWarp(String warp) {
-        return (Location) getConfig().get("warps." + warp.toLowerCase());
+        return LocationUtil.fromStringWXYZYP(getConfig().getString("warps." + warp.toLowerCase()));
     }
 
     public static boolean isWarpSet(String warp) {

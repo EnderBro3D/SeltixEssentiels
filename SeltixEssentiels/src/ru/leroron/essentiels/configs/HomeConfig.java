@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import ru.leroron.essentiels.Main;
+import ru.leroron.essentiels.utils.LocationUtil;
 
 public class HomeConfig {
     public static void loadConfig(Main plugin) {
@@ -23,12 +24,12 @@ public class HomeConfig {
     }
 
     public static void setHome(Player p, Location loc) {
-        getConfig().set("homes." + p.getName().toLowerCase(), loc);
+        getConfig().set("homes." + p.getName().toLowerCase(), LocationUtil.toStringWXYZYP(loc));
         saveConfig();
     }
 
     public static Location getHome(Player p) {
-        return (Location) getConfig().get("homes." + p.getName().toLowerCase());
+        return LocationUtil.fromStringWXYZYP(getConfig().getString("homes." + p.getName().toLowerCase()));
     }
 
     public static boolean isHomeSet(Player p) {

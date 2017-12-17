@@ -7,20 +7,21 @@ import org.bukkit.entity.Player;
 import ru.leroron.essentiels.Main;
 import ru.leroron.essentiels.configs.HomeConfig;
 import ru.leroron.essentiels.configs.MainConfig;
+import ru.leroron.essentiels.configs.MessageConfig;
 
 public class SethomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
         if (!sender.hasPermission("essentiels.sethome")) {
-            sender.sendMessage(MainConfig.getMessage("messages.locations.sethome.noperms"));
+            sender.sendMessage(MessageConfig.getMessage("locations.sethome.noperms"));
             return true;
         }
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MainConfig.getMessage("messages.notplayer"));
+            sender.sendMessage(MessageConfig.getMessage("notplayer"));
             return true;
         }
         HomeConfig.setHome((Player) sender, ((Player) sender).getLocation());
-        sender.sendMessage(MainConfig.getMessage("messages.locations.sethome.msg"));
+        sender.sendMessage(MessageConfig.getMessage("locations.sethome.msg"));
         return true;
     }
 }

@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.leroron.essentiels.Main;
 import ru.leroron.essentiels.configs.MainConfig;
+import ru.leroron.essentiels.configs.MessageConfig;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -27,18 +28,18 @@ public class VanishCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!sender.hasPermission("essentiels.vanish")) {
-            sender.sendMessage(MainConfig.getMessage("messages.vanish.noperms"));
+            sender.sendMessage(MessageConfig.getMessage("vanish.noperms"));
             return true;
         }
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MainConfig.getMessage("messages.notplayer"));
+            sender.sendMessage(MessageConfig.getMessage("notplayer"));
             return true;
         }
         Player player = (Player) sender;
         boolean vanish = Main.vanish.contains(player);
         if(vanish) show(player);
         else hide(player);
-        sender.sendMessage(MainConfig.getMessage("messages.vanish." + vanish));
+        sender.sendMessage(MessageConfig.getMessage("vanish." + vanish));
         return false;
     }
 }

@@ -4,9 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import ru.leroron.essentiels.configs.HomeConfig;
-import ru.leroron.essentiels.configs.MainConfig;
-import ru.leroron.essentiels.configs.WarpConfig;
+import ru.leroron.essentiels.configs.*;
 import ru.leroron.essentiels.storage.BanStorage;
 
 public class MainCommand implements CommandExecutor {
@@ -14,18 +12,17 @@ public class MainCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {
         if (!sender.hasPermission("essentiels.help")) {
-            sender.sendMessage(MainConfig.getMessage("messages.essentiels.noperms"));
+            sender.sendMessage(MessageConfig.getMessage("essentiels.noperms"));
             return true;
         }
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MainConfig.getMessage("messages.essentiels.notplayer"));
+            sender.sendMessage(MessageConfig.getMessage("essentiels.notplayer"));
             return true;
         }
 
         if (args.length == 0) {
             sender.sendMessage("§6Essentiels §8| §7by Leroron123 v1.11 §8| §bMineHack Community");
             sender.sendMessage(" §6• §fСменить игровой режим - §6/gm [0/1/2/3]");
-            sender.sendMessage(" §6• §fВключить режим полета - §6/fly");
             sender.sendMessage(" §6• §fТелепортироваться к игроку - §6/call [ник]");
             sender.sendMessage("  §e• §fПринять запрос на телепортацию - §e/tpaccept §fили §e/tpyes");
             sender.sendMessage("  §e• §fОтклонить запрос на телепортацию - §e/tpdeny §fили §e/tpno");
@@ -37,7 +34,7 @@ public class MainCommand implements CommandExecutor {
             sender.sendMessage(" §6• §fВключить/выключить режим невидимости - §6/vanish");
             sender.sendMessage(" §6• §fПоказать статистику памяти сервера - §6/memory");
             sender.sendMessage(" §6• §fПодать жалобу на игрока - §6/report [ник] [причина]");
-            sender.sendMessage(" §6• §fЗадать вопрос персоналу сервера - §6/chat [сообщение]");
+            sender.sendMessage(" §6• §fЗадать вопрос персоналу сервера - §6/ask [сообщение]");
             sender.sendMessage("  §e• §fОтветить на вопрос игрока - §e/askreply [ник] [сообщение]");
             sender.sendMessage(" §6• §fВключить/выключить режим Бога - §6/god");
             sender.sendMessage(" §6• §fУстановить точку спавна - §6/setspawn");
@@ -58,11 +55,8 @@ public class MainCommand implements CommandExecutor {
 
         switch (args[0].toLowerCase()) {
             case "reload": {
-                BanStorage.reloadConfig();
-                HomeConfig.reloadConfig();
-                WarpConfig.reloadConfig();
-                MainConfig.reloadConfig();
-                sender.sendMessage(MainConfig.getMessage("messages.essentiels.reload"));
+                ConfigManager.reloadConfigurations();
+                sender.sendMessage(MessageConfig.getMessage("essentiels.reload"));
                 break;
             }
             case "info": {

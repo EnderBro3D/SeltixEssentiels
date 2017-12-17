@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.leroron.essentiels.Main;
 import ru.leroron.essentiels.configs.ConfigManager;
 import ru.leroron.essentiels.configs.MainConfig;
+import ru.leroron.essentiels.configs.MessageConfig;
 
 @SuppressWarnings("All")
 public class BanStorage {
@@ -40,27 +41,27 @@ public class BanStorage {
     }
 
     public static String compileReason(OfflinePlayer player) {
-        return MainConfig.getMessage("messages.bans.reason")
+        return MessageConfig.getMessage("bans.reason")
                 .replace("%reason", getReason(player))
                 .replace("%whoban", getWhoban(player));
     }
 
     public static void kick(Player whoKick, Player player, String reason) {
-        player.kickPlayer(MainConfig.getMessage("messages.kick.reason")
+        player.kickPlayer(MessageConfig.getMessage("kick.reason")
                 .replace("%reason", reason == null ? "Нет причины" : reason)
                 .replace("%whokick", whoKick == null ? "Console" : Main.getPrefix(whoKick) + whoKick.getName()));
 
-        whoKick.sendMessage(MainConfig.getMessage("messages.kick.msg"));
+        whoKick.sendMessage(MessageConfig.getMessage("kick.msg"));
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> p.hasPermission("essentiels.kick.see"))
-                .forEach(p -> p.sendMessage(MainConfig.getMessage("messages.kick.kickall")
+                .forEach(p -> p.sendMessage(MessageConfig.getMessage("kick.kickall")
                         .replace("%player", player.getName())
                         .replace("%whoKick", whoKick == null ? "Console" : Main.getPrefix(whoKick) + whoKick.getName())
                         .replace("%reason", reason)));
     }
 
     public static void unban(OfflinePlayer player) {
-        getConfig().set("bans." + player.getPlayer().toString(), null);
+        getConfig().set("bans." + player.getName().toLowerCase(), null);
         saveConfig();
     }
 
@@ -75,10 +76,10 @@ public class BanStorage {
         saveConfig();
         if (player.isOnline()) player.getPlayer().kickPlayer(compileReason(player));
 
-        whoBan.sendMessage(MainConfig.getMessage("messages.bans.msg"));
+        whoBan.sendMessage(MessageConfig.getMessage("bans.msg"));
         Bukkit.getOnlinePlayers().stream()
                 .filter(p -> p.hasPermission("essentiels.ban.see"))
-                .forEach(p -> p.sendMessage(MainConfig.getMessage("messages.bans.banall")
+                .forEach(p -> p.sendMessage(MessageConfig.getMessage("bans.banall")
                         .replace("%player", player.getName())
                         .replace("%whoBan", whoBan == null ? "Console" : Main.getPrefix(whoBan) + whoBan.getName())
                         .replace("%reason", reason)));
