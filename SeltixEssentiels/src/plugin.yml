@@ -1,0 +1,5 @@
+name: SeltixEssentiels
+main: ru.leroron.essentiels.Main
+version: 1.11
+authors: [Leroron123, WhileInside]
+softDepend: [Vault]

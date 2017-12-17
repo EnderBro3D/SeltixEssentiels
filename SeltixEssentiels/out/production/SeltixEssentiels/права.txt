@@ -1,0 +1,16 @@
+    - essentiels.gamemode #Право на изменение игрового режима (/gm, /gamemode)
+    - essentiels.use #Право на основные команды - (/ess, /essentiels, /se, /seltixess, /seltixessentiels)
+    - essentiels.ban #Право на бан (/ban, /permban)
+    - essentiels.fly #Право на полет (/fly, /flight)
+    - essentiels.kick #Право на кик игроков (/kick)
+    - essentiels.chatclear #Право на очистку чата (/chatclear, /cclear, /cc)
+    - essentiels.staffchat #Право на переписку в чате персонала (/staffchat, /sc, /adminchat, /ac)
+    - essentiels.join #Право на сообщение о входе игрока
+    - essentiels.kickall #Право на кик всех онлайн игроков (/kickall)
+    - essentiels.invclear #Право на очистку инвенторя (/clear, /invclear, /inventoryclear)
+    - essentiels.broadcast #Право на сообщения особого внимания (/bc, /broadcast)
+    - essentiels.report #Право на подачу жалобы (/report)
+    - essentiels.staffreport #Право на просмотр жалоб
+    - essentiels.ask #Право на вопрос админу (/ask)
+    - essentiels.staffask #Право ответа на вопросы игроков (/askreply)
+    - essentiels.msg #Право на переписку в ЛС (/m, /msg, /message)
